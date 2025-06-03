@@ -1,6 +1,6 @@
 # Simple Platformer Game
 
-This is a simple platformer game created for the Code in Place Final Project using Python and Tkinter Canvas.
+This is a simple platformer game created for the Code in Place Final Project using Python and the graphics.py library.
 
 ## Game Features
 
@@ -13,17 +13,18 @@ This is a simple platformer game created for the Code in Place Final Project usi
 
 ## How to Play
 
-1. Run the game: `python platformer_game.py`
-2. Press SPACE to start the game
-3. Use LEFT and RIGHT arrow keys to move
-4. Use UP arrow key to jump
-5. Reach the gold platform to advance to the next level
-6. Don't fall off the bottom of the screen!
+1. Make sure you have the graphics.py library installed
+2. Run the game: `python platformer_game.py`
+3. Press SPACE to start the game
+4. Use LEFT and RIGHT arrow keys to move
+5. Use UP arrow key to jump
+6. Reach the gold platform to advance to the next level
+7. Don't fall off the bottom of the screen!
 
 ## Requirements
 
 - Python 3.x
-- Tkinter (usually comes pre-installed with Python)
+- graphics.py library (commonly used in Code in Place)
 
 ## Game Controls
 
