@@ -13,7 +13,7 @@ MOVE_SPEED = 5
 
 class PlatformerGame:
     def __init__(self):
-        self.win = GraphWin("Simple Platformer", WINDOW_WIDTH, WINDOW_HEIGHT, autoflush=False)
+        self.win = GraphWin("Simple Platformer", WINDOW_WIDTH, WINDOW_HEIGHT)
         self.win.setBackground("skyblue")
         
         self.game_running = False
@@ -27,8 +27,6 @@ class PlatformerGame:
         self.on_ground = False
         self.facing_right = True
         
-        self.keys_down = set()
-        
         self.platforms = []
         self.platform_shapes = []
         self.player_shape = None
@@ -36,18 +34,8 @@ class PlatformerGame:
         self.score_text = None
         self.level_text = None
         
-        self.win.bind_all("<KeyPress>", self._on_key_press)
-        self.win.bind_all("<KeyRelease>", self._on_key_release)
-        
         self.show_start_menu()
         self.run_game_loop()
-    
-    def _on_key_press(self, event):
-        self.keys_down.add(event.keysym)
-    
-    def _on_key_release(self, event):
-        if event.keysym in self.keys_down:
-            self.keys_down.remove(event.keysym)
     
     def show_start_menu(self):
         title = Text(Point(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 3), "SIMPLE PLATFORMER")
@@ -62,7 +50,7 @@ class PlatformerGame:
         start_text.draw(self.win)
         
         controls_text = Text(Point(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 50), 
-                           "Controls: Arrow keys to move, Up to jump")
+                           "Controls: WASD to move and jump")
         controls_text.setSize(14)
         controls_text.setTextColor("white")
         controls_text.draw(self.win)
@@ -173,8 +161,6 @@ class PlatformerGame:
         self.level_text = Text(Point(70, 60), f"Level: {self.level}")
         self.level_text.setSize(14)
         self.level_text.draw(self.win)
-        
-        self.win.update()
     
     def check_platform_collision(self):
         self.on_ground = False
@@ -207,20 +193,18 @@ class PlatformerGame:
         if not self.game_running:
             return
         
-        if 'space' in self.keys_down and not self.game_running:
-            self.start_game()
-            return
-            
-        if 'Left' in self.keys_down:
+        key = self.win.checkKey()
+        
+        if key == "a":
             self.velocity_x = -MOVE_SPEED
             self.facing_right = False
-        elif 'Right' in self.keys_down:
+        elif key == "d":
             self.velocity_x = MOVE_SPEED
             self.facing_right = True
         else:
             self.velocity_x = 0
         
-        if 'Up' in self.keys_down and self.on_ground:
+        if key == "w" and self.on_ground:
             self.velocity_y = JUMP_FORCE
             self.on_ground = False
         
@@ -274,20 +258,20 @@ class PlatformerGame:
         restart_text.draw(self.win)
         
         self.menu_items = [game_over_text, score_text, restart_text]
-        self.win.update()
     
     def check_keys(self):
         key = self.win.checkKey()
-        if key == "Escape":
-            self.win.close()
+        
+        if key == "space" and not self.game_running:
+            self.start_game()
     
     def run_game_loop(self):
-        while not self.win.isClosed():
-            try:
-                self.check_keys()
-                self.update()
-                time.sleep(0.016)  # ~60 FPS
-            except:
+        while True:
+            self.check_keys()
+            self.update()
+            time.sleep(0.016)  # ~60 FPS
+            
+            if self.win.isClosed():
                 break
 
 def main():
